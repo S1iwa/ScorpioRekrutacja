@@ -19,8 +19,8 @@ public:
     Impossible& operator=(Impossible&&) = delete;
   };
 
-  virtual std::shared_ptr<Component<uint8_t, uint16_t>> get_engine_1() = 0;
-  virtual std::shared_ptr<Component<uint8_t, uint16_t>> get_engine_2() = 0;
+  virtual std::shared_ptr<Component<uint8_t, uint16_t>> get_motor_1() = 0;
+  virtual std::shared_ptr<Component<uint8_t, uint16_t>> get_motor_2() = 0;
   virtual std::shared_ptr<Component<std::pair<double, double>, Impossible>> get_commands() = 0;
 };
 }  // namespace backend_interface

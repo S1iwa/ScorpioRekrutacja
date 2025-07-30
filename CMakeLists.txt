@@ -11,7 +11,10 @@ add_library(backend SHARED
   src/backend/motor.cpp
 )
 target_include_directories(backend PUBLIC include/backend_interface/)
-target_include_directories(backend PRIVATE include/backend/)
+target_include_directories(backend PRIVATE 
+  include/backend/
+  include/solution_interface/
+)
 
 
 # Solution library
