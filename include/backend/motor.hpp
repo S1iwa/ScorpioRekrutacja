@@ -13,7 +13,8 @@ class Motor final : public backend_interface::Component<int8_t, uint16_t>, publi
   #ifdef FRIEND_TEST
     FRIEND_TEST(MotorTest, LimitTest);
     FRIEND_TEST(MotorTest, LimitTest2);
-  #endif  
+  #endif
+  friend class BasicTester;
   std::atomic<int8_t> _cs;
   std::atomic<uint16_t> _pose;
   std::mt19937 _random_generator;

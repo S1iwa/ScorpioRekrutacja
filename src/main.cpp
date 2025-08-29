@@ -11,7 +11,7 @@
 #include "solver.hpp"
 
 template<typename T>
-void run_tests(T&& input_stream, double encoders_frequency) {
+void run_tests(T&& input_stream, double encoder_period, bool debug, backend::Constraints constraints) {
   static_assert(std::is_base_of_v<std::istream, std::decay_t<T>>,
     "Input type must be derived from std::istream");
   std::string line;
@@ -34,22 +34,22 @@ void run_tests(T&& input_stream, double encoders_frequency) {
     }
     signals.emplace_back(delay, point);
   }
-  auto tester = std::make_shared<backend::BasicTester>(encoders_frequency, signals);
+  auto tester = std::make_shared<backend::BasicTester>(encoder_period, signals, debug, constraints);
   solver(tester);
 }
 
 void print_help(const char* const self) {
   std::cout << "Usage: " << self << " [options]\n"
     "Options:\n"
-    "  -h        Show this help message\n"
-    "  -f FILE   Read input from FILE instead of standard input\n"
-    "  -g LIMIT  Enable debug output\n"
-    "  -t LIMIT  Maximum (limit) encoder reading when moving vertical motor up\n"
-    "  -d LIMIT  Minumum (limit) encoder reading when moving vertical motor down\n"
-    "  -l LIMIT  Maximum (limit) encoder reading when moving horizontal motor right\n"
-    "  -r LIMIT  Minumum (limit) encoder reading when moving horizontal motor left\n"
-    "            Limits are in range [0, 4095]\n"
-    "  -q FREQ   Encoders update frequency\n"
+    "  -h         Show this help message\n"
+    "  -f FILE    Read input from FILE instead of standard input\n"
+    "  -g LIMIT   Enable debug output\n"
+    "  -t LIMIT   Maximum (limit) encoder reading when moving vertical motor up\n"
+    "  -d LIMIT   Minumum (limit) encoder reading when moving vertical motor down\n"
+    "  -l LIMIT   Maximum (limit) encoder reading when moving horizontal motor right\n"
+    "  -r LIMIT   Minumum (limit) encoder reading when moving horizontal motor left\n"
+    "             Limits are in range [0, 4095]\n"
+    "  -q PERIOD  Encoders update period\n"
     ;
 }
 
@@ -68,8 +68,9 @@ int main(const int argc, const char* const argv[]) {
   }
   std::optional<const char*> input_file;
   backend::Constraints constraints;
-  double encoders_frequency = 0.05;
+  double encoder_period = 0.05;
   int i = 1;
+  bool debug = false;
   auto get_next_arg = [&argc, &argv, &i]() -> std::optional<const char*> {
     ++i;
     if (i >= argc) {
@@ -185,8 +186,8 @@ int main(const int argc, const char* const argv[]) {
           return 1;
         }
         try {
-          encoders_frequency = std::stod(*arg);
-          if (encoders_frequency <= 0.0) {
+          encoder_period = std::stod(*arg);
+          if (encoder_period <= 0.0) {
             std::cerr << "Option -q requires a positive number\n";
             return 1;
           }
@@ -194,6 +195,10 @@ int main(const int argc, const char* const argv[]) {
           std::cerr << "Option -q requires a valid number\n";
           return 1;
         }
+        break;
+      }
+      case 'g': {
+        debug = true;
         break;
       }
     }
@@ -204,10 +209,10 @@ int main(const int argc, const char* const argv[]) {
       std::cerr << "Failed to open file " << *input_file << "\n";
       return 1;
     }
-    run_tests(file_stream, encoders_frequency);
+    run_tests(file_stream, encoder_period, debug, constraints);
   } else {
     std::cout << "Reading from standard input, press Ctrl+D (or Ctrl+Z on Windows) to end input\n";
-    run_tests(std::cin, encoders_frequency); 
+    run_tests(std::cin, encoder_period, debug, constraints); 
   }
   return 0;
 }

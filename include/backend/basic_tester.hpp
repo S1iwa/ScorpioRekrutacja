@@ -28,12 +28,12 @@ class BasicTester final : public backend_interface::Tester {
   std::thread _spinner;
   std::thread _sender;
 
-  void spinner(double encoder_frequency);
+  void spinner(double encoder_period, bool debug);
   void sender(std::vector<std::pair<double, Point>> signals);
 
 public:
-  BasicTester(double encoder_frequency, std::vector<std::pair<double, Point>> signals,
-    Constraints constraints = {});
+  BasicTester(double encoder_period, std::vector<std::pair<double, Point>> signals,
+    bool debug = false, Constraints constraints = {});
   ~BasicTester();
 
   inline std::shared_ptr<backend_interface::Component<int8_t, uint16_t>> get_motor_1() noexcept override {
