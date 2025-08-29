@@ -2,9 +2,13 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
-#include <utility>
 #include "component.hpp"
+
+struct Point {
+  double x;
+  double y;
+  double z;
+};
 
 namespace backend_interface {
 class Tester {
@@ -19,8 +23,8 @@ public:
     Impossible& operator=(Impossible&&) = delete;
   };
 
-  virtual std::shared_ptr<Component<uint8_t, uint16_t>> get_motor_1() = 0;
-  virtual std::shared_ptr<Component<uint8_t, uint16_t>> get_motor_2() = 0;
-  virtual std::shared_ptr<Component<std::pair<double, double>, Impossible>> get_commands() = 0;
+  virtual std::shared_ptr<Component<int8_t, uint16_t>> get_motor_1() = 0;
+  virtual std::shared_ptr<Component<int8_t, uint16_t>> get_motor_2() = 0;
+  virtual std::shared_ptr<Component<Impossible, Point>> get_commands() = 0;
 };
 }  // namespace backend_interface
