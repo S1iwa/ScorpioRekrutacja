@@ -30,6 +30,7 @@ target_include_directories(solution PUBLIC include/solution_interface/)
 
 # Executable for the exercise
 add_executable(scorpio_recruitment_task src/main.cpp)
+target_include_directories(scorpio_recruitment_task PRIVATE include/)
 target_link_libraries(scorpio_recruitment_task PRIVATE backend solution)
 
 
@@ -46,8 +47,8 @@ if(BUILD_TESTS)
   target_include_directories(tests PRIVATE
     include/backend_interface/
     include/backend/
+    include/
   )
-  target_include_directories(tests PRIVATE include/solution_interface/)
-  target_link_libraries(tests PRIVATE GTest::GTest GTest::Main)
+  target_link_libraries(tests PRIVATE GTest::GTest GTest::Main solution)
   gtest_discover_tests(tests)
 endif()

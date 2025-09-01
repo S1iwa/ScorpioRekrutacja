@@ -3,40 +3,9 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <optional>
-#include <string>
 #include <type_traits>
 
-#include "basic_tester.hpp"
-#include "solver.hpp"
-
-template<typename T>
-void run_tests(T&& input_stream, double encoder_period, bool debug, backend::Constraints constraints) {
-  static_assert(std::is_base_of_v<std::istream, std::decay_t<T>>,
-    "Input type must be derived from std::istream");
-  std::string line;
-  std::vector<std::pair<double, Point>> signals;
-  while (std::getline(input_stream, line)) {
-    if (line.empty()) {
-      continue;
-    }
-    std::istringstream line_stream(line);
-    double delay;
-    Point point;
-    line_stream >> delay >> point.x >> point.y >> point.z;
-    if (line_stream.fail() || !line_stream.eof()) {
-      std::cerr << "Invalid input format\n";
-      return;
-    }
-    if (delay < 0.0) {
-      std::cerr << "Delay must be non-negative\n";
-      return;
-    }
-    signals.emplace_back(delay, point);
-  }
-  auto tester = std::make_shared<backend::BasicTester>(encoder_period, signals, debug, constraints);
-  solver(tester);
-}
+#include "main.hpp"
 
 void print_help(const char* const self) {
   std::cout << "Usage: " << self << " [options]\n"
