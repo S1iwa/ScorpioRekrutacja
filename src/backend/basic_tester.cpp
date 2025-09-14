@@ -26,14 +26,13 @@ void backend::BasicTester::spinner(const double encoder_period, const bool debug
   double time_accumulator = 0.0;
   while (!_stop.load(std::memory_order_relaxed)) {
     const auto start = std::chrono::steady_clock::now();
-    _motor1->spin(static_cast<double>(frame_duration.count()) / 1000.0);
-    _motor2->spin(static_cast<double>(frame_duration.count()) / 1000.0);
+    _motor1->spin(static_cast<double>(frame_duration.count()));
+    _motor2->spin(static_cast<double>(frame_duration.count()));
     if (debug) {
-      std::cout << '[' << encoder_period << "] " << _motor1->_cs.load(std::memory_order_relaxed)
-      << _motor1->_pose.load(std::memory_order_relaxed)
-      << _motor2->_cs.load(std::memory_order_relaxed)
-      << _motor2->_pose.load(std::memory_order_relaxed);
-      time_accumulator += encoder_period;
+      std::cout << '[' << encoder_period << "] " << std::to_string(_motor1->_cs.load(std::memory_order_relaxed)) << " "
+      << _motor1->_pose.load(std::memory_order_relaxed) << " "
+      << std::to_string(_motor2->_cs.load(std::memory_order_relaxed)) << " "
+      << _motor2->_pose.load(std::memory_order_relaxed) << std::endl;
     }
     const auto end = std::chrono::steady_clock::now();
     const auto elapsed = end - start;

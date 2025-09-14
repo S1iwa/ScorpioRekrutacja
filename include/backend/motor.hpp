@@ -28,8 +28,8 @@ public:
     std::optional<uint16_t> negative_limit = std::nullopt);
 
   void spin(double) override;
-  inline void add_data_callback(std::function<void(const uint16_t&)>) override  {
-    _data_callback = std::move(_data_callback);
+  inline void add_data_callback(std::function<void(const uint16_t&)> data_callback) override  {
+    _data_callback = std::move(data_callback);
   }
   inline void send_data(const int8_t& control_signal) override {
     _cs.store(control_signal, std::memory_order_relaxed);
