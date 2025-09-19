@@ -1,5 +1,7 @@
 # Projekt Scorpio - zadanie rekrutacyjne do działu Software
+
 >**Uwaga!** Przed przystąpieniem do realizacji zadania przeczytaj **całe** README.
+
 ## Spis treści
 - [Informacje ogólne](#informacje-ogólne)
 - [Zadania do wykonania](#zadania-do-wykonania)
@@ -10,9 +12,9 @@
 - [Wskazówki i przydatne linki](#wskazówki-i-przydatne-linki)
 
 ## Informacje ogólne
-Zadanie wykorzystuje symulację dwu-osiowej platformy obrotowej, w której za pomocą stworzonego przez nas API można sterować dwoma silnikami oraz dokonywać odczytu wartości ich enkoderów. Silnik numer 1 jest odpowiedzialny za ruch w osi poziomej, zaś numer 2 w pionowej.
+Zadanie wykorzystuje symulację dwu-osiowej platformy obrotowej, w której za pomocą stworzonego przez nas API można sterować dwoma silnikami oraz dokonywać odczytu wartości ich enkoderów. Silnik numer 1 jest odpowiedzialny za ruch w osi poziomej, zaś numer 2 w pionowej.
 
-Całość zadania należy wykonać w języku C++, zgodnie ze standardem C++17.
+Całość zadania należy wykonać w języku C++, zgodnie ze standardem C++17.
 
 ## Zadania do wykonania 
 W tej części znajdziesz treść poszczególnych zadań, szczegółowe informacje dotyczące symulacji oraz jej implementacji znajdziesz w [specyfikacja techniczna zadania](#specyfikacja-techniczna-zadania).
@@ -26,30 +28,31 @@ Pamiętaj, że zadanie służy sprawdzeniu wielu umiejętności - nie tylko prog
 ## Specyfikacja techniczna zadania
 
 ### Symulacja
+
 #### System współrzędnych i mapowanie enkoderów
 
 Symulacja implementuje dwu-osiową platformę obrotową z następującym układem współrzędnych:
 
-##### Silnik 1 - Oś pozioma
-- **Wartość = 0** -> silnik skierowany zgodnie z osią X
-- **Wartość rosnąca** -> silnik kręci się zgodnie z ruchem wskazówek zegara
+**Silnik 1 - Oś pozioma:**
+- Wartość = 0 → silnik skierowany zgodnie z osią X
+- Wartość rosnąca → silnik kręci się zgodnie z ruchem wskazówek zegara
 
-##### Silnik 2 - Oś pionowa
-- **Wartość = 0** -> silnik skierowany "poziomo" (równolegle do płaszczyzny XY)
-- **Wartość rosnąca** -> silnik kręci się do góry
+**Silnik 2 - Oś pionowa:**
+- Wartość = 0 → silnik skierowany "poziomo" (równolegle do płaszczyzny XY)
+- Wartość rosnąca → silnik kręci się do góry
 
-##### Charakterystyka ruchu
+#### Charakterystyka ruchu
 
 **Sygnały sterujące:**
-- **Wartości dodatnie** (1-127): ruch w kierunku rosnących wartości enkodera
-- **Wartości ujemne** (-128 do -1): ruch w kierunku malejących wartości enkodera
-- **Wartość 0**: brak ruchu
+- Wartości dodatnie (1-127): ruch w kierunku rosnących wartości enkodera
+- Wartości ujemne (-128 do -1): ruch w kierunku malejących wartości enkodera
+- Wartość 0: brak ruchu
 
 **Właściwości enkoderów:**
-- **Zakres:** 0-4095 (12-bit, cykliczny)
-- **Rozdzielczość:** 4096 pozycji na pełny obrót (360°)
-- **Szum:** dodawany szum gaussowski (σ = 0.6)
-- **Częstotliwość odczytu:** konfigurowalna (domyślnie 20 Hz)
+- Zakres: 0-4095 (12-bit, cykliczny)
+- Rozdzielczość: 4096 pozycji na pełny obrót (360°)
+- Szum: dodawany szum gaussowski (σ = 0.6)
+- Częstotliwość odczytu: konfigurowalna (domyślnie 20 Hz)
 
 **Ograniczenia mechaniczne:**
 - Silniki respektują limity ustawione przez parametry CLI (`-t`, `-d`, `-l`, `-r`)
@@ -62,22 +65,19 @@ Symulacja implementuje dwu-osiową platformę obrotową z następującym układe
 - Callback enkodera jest wywoływany co okres aktualizacji z dodanym szumem
 
 ### Dokumentacja API
-> **Uwaga!** Nie należy modyfikować implementacji symulacji. Całe twoje rozwiązanie powinno znaleźć się w katalogach `*/solution`, a punktem wejściowym twojego rozwiązania powinna być metoda `solver()` w pliku `solution.cpp`.
 
-#### Tester
+> **Uwaga!** Nie należy modyfikować implementacji symulacji. Całe twoje rozwiązanie powinno znaleźć się w katalogach `*/solution`, a punktem wejściowym twojego rozwiązania powinna być metoda `solver()` w pliku `solution.cpp`.
+
+#### Interfejs Tester
 
 Interfejs `backend_interface::Tester` zapewnia dostęp do symulacji dwu-osiowej platformy obrotowej. Pozwala na sterowanie silnikami oraz odbieranie sygnałów poleceń.
 
-##### Składniki
-
-**Silniki:**
+**Składniki:**
 - `get_motor_1()` - zwraca silnik osi poziomej
 - `get_motor_2()` - zwraca silnik osi pionowej
-
-**Polecenia:**
 - `get_commands()` - zwraca komponent do odbierania poleceń pozycji
 
-##### Interfejs Component
+#### Interfejs Component
 
 Wszystkie komponenty implementują interfejs `Component<Send, Receive>`, który udostępnia możliwość pracy w modelu publisher/subscriber:
 
@@ -90,7 +90,7 @@ public:
 };
 ```
 
-##### Silniki (`Component<int8_t, uint16_t>`)
+#### Silniki (`Component<int8_t, uint16_t>`)
 
 **Wysyłanie sygnału sterującego:**
 ```cpp
@@ -106,13 +106,13 @@ motor1->add_data_callback([](const uint16_t& encoder_value) {
 ```
 
 **Charakterystyka silników:**
-- **Typ sygnału sterującego:** `int8_t` (zakres: -128 do 127)
-- **Typ odczytu enkodera:** `uint16_t` (zakres: 0 do 4095)
-- **Motor 1:** steruje osią poziomą
-- **Motor 2:** steruje osią pionową
-- **Ograniczenia:** silniki respektują limity ustawione podczas inicjalizacji
+- Typ sygnału sterującego: `int8_t` (zakres: -128 do 127)
+- Typ odczytu enkodera: `uint16_t` (zakres: 0 do 4095)
+- Motor 1: steruje osią poziomą
+- Motor 2: steruje osią pionową
+- Ograniczenia: silniki respektują limity ustawione podczas inicjalizacji
 
-##### Polecenia (`Component<Impossible, Point>`)
+#### Polecenia (`Component<Impossible, Point>`)
 
 **Odbieranie poleceń pozycji:**
 ```cpp
