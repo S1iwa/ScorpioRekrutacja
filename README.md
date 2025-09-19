@@ -184,6 +184,9 @@ Program symulacji platformy obrotowej obsługuje następujące argumenty wiersza
 - Użyj opcji `-h` aby wyświetlić szybką pomoc
 
 ## Wskazówki i przydatne linki
+
+- [C++17 Reference - cppreference.com](https://en.cppreference.com/)
+- [CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 - Zadanie rekrutacyjne można oddać niepełne.
 - Rozwiązane zadanie należy umieścić w **publicznym** repozytorium (np. GitHub) i przesłać linka do tego repozytorium na mail projekt@scorpio.pwr.edu.pl. Ewentualne pytania lub wątpliwości co do treści zadania można kierować na tego samego maila. Zadania przyjmujemy do 06.04.2025 do końca dnia.
 //  TODO(@mariusz): Change this date
