@@ -2,12 +2,20 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include "component.hpp"
 
 struct Point {
   double x;
   double y;
   double z;
+};
+
+struct Constraints {
+  std::optional<uint16_t> vertical_max;
+  std::optional<uint16_t> vertical_min;
+  std::optional<uint16_t> horizontal_max;
+  std::optional<uint16_t> horizontal_min;
 };
 
 namespace backend_interface {

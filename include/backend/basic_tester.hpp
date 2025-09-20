@@ -11,12 +11,6 @@
 #include "tester.hpp"
 
 namespace backend {
-struct Constraints {
-  std::optional<uint16_t> vertical_max;
-  std::optional<uint16_t> vertical_min;
-  std::optional<uint16_t> horizontal_max;
-  std::optional<uint16_t> horizontal_min;
-};
 
 class BasicTester final : public backend_interface::Tester {
   std::shared_ptr<backend::Motor> _motor1;

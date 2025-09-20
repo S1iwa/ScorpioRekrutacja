@@ -36,7 +36,7 @@ int main(const int argc, const char* const argv[]) {
     return 1;
   }
   std::optional<const char*> input_file;
-  backend::Constraints constraints;
+  Constraints constraints;
   double encoder_period = 0.05;
   int i = 1;
   bool debug = false;

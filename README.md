@@ -14,6 +14,8 @@
 ## Informacje ogólne
 Zadanie wykorzystuje symulację dwu-osiowej platformy obrotowej, w której za pomocą stworzonego przez nas API można sterować dwoma silnikami oraz dokonywać odczytu wartości ich enkoderów. Silnik numer 1 jest odpowiedzialny za ruch w osi poziomej, zaś numer 2 w pionowej.
 
+Uznajemy, na potrzebę zadań, że na osi pionowej zamontowana jest kamera, którą możemy się rozglądać sterując silnikami.
+
 Całość zadania należy wykonać w języku C++, zgodnie ze standardem C++17.
 
 ## Zadania do wykonania 
@@ -23,7 +25,31 @@ Pamiętaj, że zadanie służy sprawdzeniu wielu umiejętności - nie tylko prog
 
 1. **Zbudowanie projektu:**
 
+- Sklonuj to repozytorium, skonfiguruj środowisko i upewnij się, że projekt kompiluje się przy użyciu `CMake`.
+- Uruchom skompilowany plik wykonywalny i zadaj cel za pomocą wiersza poleceń, np: `5 3 4 5`.
+- Za pomocą `Shift+D` zakończ wprowadzanie celów. Program powinien zakończyć działanie, po implementacji rozwiązania w tym momencie zostaną mu zadane wprowadzone cele.
+
 > **Wskazówka!** Dobrym rozwiązaniem jest "fork" tego repozytorium
+
+2. **Dojazd do pojedyńczego celu**
+
+- Poprzez komponent odpowiedzialny za zadawanie punktów zostanie przesłany pojedyńczy punkt. Należy obrócić obydwoma silnikami tak, aby kamera patrzyła na ten punkt.
+
+> **Wskazówka!** W sekcji [symulacja](#symulacja) znajdziesz dokładny opis platformy obrotowej.
+
+3. **Dojazd do wielu celów (priorytet ostatniego)**
+
+- Poprzez komponent odpowiedzialny za zadawanie punktów zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Każdy punkt należy obsłużyć dokładnie tak jak w poprzednim zadaniu. Jeżeli podczas dojazdu do celu zostanie zadany kolejny cel, należy obecny cel porzucić.
+
+> **Wskazówka!** Pamiętaj o regularnym commitowaniu rozwiązania.
+
+4.1. **Dojazd do wielu celów (kolejka)**
+
+- Poprzez komponent odpowiedzialny za zadawanie punktów zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Należy każdy z tych punktów obsłużyć dokładnie tak jak w poprzednim zadaniu, dojeżdżając do każdego po kolei, bez wywłaszczenia.
+
+4.2. **Dojazd do wielu celów (z ograniczeniami)**
+
+- W tym zadaniu zostaną zadane limity dla każdego z silników. Cele należy obsłużyć analogicznie do zadania 4.1 (kolejkowo) i dojazd do nich może być niemożliwy w ramach zadanych limitów.
 
 ## Specyfikacja techniczna zadania
 
@@ -33,12 +59,15 @@ Pamiętaj, że zadanie służy sprawdzeniu wielu umiejętności - nie tylko prog
 
 Symulacja implementuje dwu-osiową platformę obrotową z następującym układem współrzędnych:
 
+**Kamera**
+- Znajduje się i obraca w punkcie `(0,0,0)`, czyli nie symulujemy żadnych wymiarów montażu, samej kamery, etc.
+
 **Silnik 1 - Oś pozioma:**
-- Wartość = 0 → silnik skierowany zgodnie z osią X
+- Wartość = 0 → kamera skierowana w kierunku +X
 - Wartość rosnąca → silnik kręci się zgodnie z ruchem wskazówek zegara
 
 **Silnik 2 - Oś pionowa:**
-- Wartość = 0 → silnik skierowany "poziomo" (równolegle do płaszczyzny XY)
+- Wartość = 0 → kamera skierowana "poziomo" (równolegle do płaszczyzny XY)
 - Wartość rosnąca → silnik kręci się do góry
 
 #### Charakterystyka ruchu
@@ -125,11 +154,27 @@ commands->add_data_callback([](const Point& target) {
 ```
 
 **Struktura Point:**
+
+Reprezentuje punkt w przestrzeni trójwymiarowej.
+
 ```cpp
 struct Point {
   double x;  // Współrzędna X
   double y;  // Współrzędna Y  
   double z;  // Współrzędna Z
+};
+```
+
+**Struktura Constraints:**
+
+Struktura określna maksymalne/minimalne wartości odczytu z enkoderów silników.
+
+```cpp
+struct Constraints {
+  std::optional<uint16_t> vertical_max;   // Ograniczenie górne osi pionowej.
+  std::optional<uint16_t> vertical_min;   // Ograniczenie dolne osi pionowej
+  std::optional<uint16_t> horizontal_max; // Ograniczenie górne osi poziomej
+  std::optional<uint16_t> horizontal_min; // Ograniczenie dolne osi poziomej
 };
 ```
 
@@ -155,8 +200,8 @@ Program symulacji platformy obrotowej obsługuje następujące argumenty wiersza
 | `-g` | - | Włącza tryb debugowania (verbose output) |
 | `-t` | LIMIT | Ustawia maksymalny (górny) limit odczytu enkodera przy ruchu silnika pionowego w górę |
 | `-d` | LIMIT | Ustawia minimalny (dolny) limit odczytu enkodera przy ruchu silnika pionowego w dół |
-| `-l` | LIMIT | Ustawia maksymalny (prawy) limit odczytu enkodera przy ruchu silnika poziomego w prawo |
-| `-r` | LIMIT | Ustawia minimalny (lewy) limit odczytu enkodera przy ruchu silnika poziomego w lewo |
+| `-r` | LIMIT | Ustawia maksymalny (prawy) limit odczytu enkodera przy ruchu silnika poziomego w prawo |
+| `-l` | LIMIT | Ustawia minimalny (lewy) limit odczytu enkodera przy ruchu silnika poziomego w lewo |
 | `-q` | PERIOD | Ustawia okres aktualizacji enkoderów (w sekundach) |
 
 #### Przykłady użycia
