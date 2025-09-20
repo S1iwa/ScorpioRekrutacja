@@ -28,9 +28,11 @@ void backend::Motor::spin(double seconds) {
     new_pose += 4096;
   }
   _pose.store(static_cast<uint16_t>(new_pose % 4096), std::memory_order_relaxed);
+  auto pose = static_cast<uint32_t>(_pose.load(std::memory_order_relaxed));
+  auto noise = static_cast<uint32_t>(std::round(_normal_distribution(_random_generator)));
+  auto noisy_pose = pose + noise;
+  while (noisy_pose < 0) { noisy_pose += 4096; }
   if (_data_callback) {
-    _data_callback(_pose + static_cast<uint16_t>(std::round(
-      _normal_distribution(_random_generator)
-    )));
+    _data_callback(static_cast<uint16_t>(noisy_pose % 4096));
   }
 }

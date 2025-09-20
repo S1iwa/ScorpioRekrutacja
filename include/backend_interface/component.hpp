@@ -10,4 +10,4 @@ public:
   virtual void add_data_callback(std::function<void(const Receive&)>) = 0;
   virtual void send_data(const Send&) = 0;
 };
-}  // namespace 
+}  // namespace backend_interface

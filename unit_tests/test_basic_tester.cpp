@@ -4,7 +4,7 @@
 #include "basic_tester.hpp"
 
 TEST(BasicTesterTest, CreationAndDestruction) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.0, {1.0, 2.0, 3.0}},
     {1.0, {4.0, 5.0, 6.0}}
@@ -15,7 +15,7 @@ TEST(BasicTesterTest, CreationAndDestruction) {
 }
 
 TEST(BasicTesterTest, GetComponents) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.0, {1.0, 2.0, 3.0}},
     {1.0, {4.0, 5.0, 6.0}}
@@ -30,7 +30,7 @@ TEST(BasicTesterTest, GetComponents) {
 }
 
 TEST(BasicTesterTest, CreationWithEmptySignals) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> empty_signals;
   
   EXPECT_NO_THROW({
@@ -61,7 +61,7 @@ TEST(BasicTesterTest, CreationWithDefaultConstraints) {
 }
 
 TEST(BasicTesterTest, CreationWithPartialConstraints) {
-  backend::Constraints constraints{std::nullopt, 100, 2000, std::nullopt};
+  Constraints constraints{std::nullopt, 100, 2000, std::nullopt};
   std::vector<std::pair<double, Point>> signals = {
     {0.05, {10.0, 20.0, 30.0}}
   };
@@ -72,7 +72,7 @@ TEST(BasicTesterTest, CreationWithPartialConstraints) {
 }
 
 TEST(BasicTesterTest, DebugModeEnabled) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 2.0, 3.0}}
   };
@@ -83,7 +83,7 @@ TEST(BasicTesterTest, DebugModeEnabled) {
 }
 
 TEST(BasicTesterTest, DebugModeDisabled) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 2.0, 3.0}}
   };
@@ -94,7 +94,7 @@ TEST(BasicTesterTest, DebugModeDisabled) {
 }
 
 TEST(BasicTesterTest, MultipleSignalsSequence) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 2.0, 3.0}},
     {0.01, {4.0, 5.0, 6.0}},
@@ -108,7 +108,7 @@ TEST(BasicTesterTest, MultipleSignalsSequence) {
 }
 
 TEST(BasicTesterTest, CommandsCallback) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.02, {100.0, 200.0, 300.0}}
   };
@@ -132,7 +132,7 @@ TEST(BasicTesterTest, CommandsCallback) {
 }
 
 TEST(BasicTesterTest, MotorDataCallback) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.05, {1.0, 2.0, 3.0}}
   };
@@ -165,7 +165,7 @@ TEST(BasicTesterTest, MotorDataCallback) {
 }
 
 TEST(BasicTesterTest, ShortLivedTester) {
-  backend::Constraints constraints{1000, 0, 1000, 0};
+  Constraints constraints{1000, 0, 1000, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 1.0, 1.0}}
   };
@@ -182,7 +182,7 @@ TEST(BasicTesterTest, ShortLivedTester) {
 }
 
 TEST(BasicTesterTest, VeryShortEncoderPeriod) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.001, {1.0, 2.0, 3.0}}
   };
@@ -193,7 +193,7 @@ TEST(BasicTesterTest, VeryShortEncoderPeriod) {
 }
 
 TEST(BasicTesterTest, MotorControlSignalPersistence) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 2.0, 3.0}}
   };
@@ -220,7 +220,7 @@ TEST(BasicTesterTest, MotorControlSignalPersistence) {
 }
 
 TEST(BasicTesterTest, NegativePointValues) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {-1.0, -2.0, -3.0}},
     {0.01, {-10.5, 15.7, -20.3}}
@@ -232,7 +232,7 @@ TEST(BasicTesterTest, NegativePointValues) {
 }
 
 TEST(BasicTesterTest, LargePointValues) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1000.0, 2000.0, 3000.0}},
     {0.01, {99999.9, -99999.9, 0.0}}
@@ -245,7 +245,7 @@ TEST(BasicTesterTest, LargePointValues) {
 
 TEST(BasicTesterTest, ConstraintLimitsValidation) {
   // Test with extreme constraint values
-  backend::Constraints extreme_constraints{65535, 0, 65535, 0};
+  Constraints extreme_constraints{65535, 0, 65535, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 2.0, 3.0}}
   };
@@ -265,7 +265,7 @@ TEST(BasicTesterTest, ConstraintLimitsValidation) {
 }
 
 TEST(BasicTesterTest, SignalTimingAccuracy) {
-  backend::Constraints constraints{4095, 0, 4095, 0};
+  Constraints constraints{4095, 0, 4095, 0};
   std::vector<std::pair<double, Point>> signals = {
     {0.01, {1.0, 2.0, 3.0}},
     {0.01, {4.0, 5.0, 6.0}},

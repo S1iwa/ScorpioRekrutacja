@@ -12,22 +12,14 @@ void print_help(const char* const self) {
     "Options:\n"
     "  -h         Show this help message\n"
     "  -f FILE    Read input from FILE instead of standard input\n"
-    "  -g LIMIT   Enable debug output\n"
+    "  -g         Enable debug output\n"
     "  -t LIMIT   Maximum (limit) encoder reading when moving vertical motor up\n"
-    "  -d LIMIT   Minumum (limit) encoder reading when moving vertical motor down\n"
+    "  -d LIMIT   Minimum (limit) encoder reading when moving vertical motor down\n"
     "  -l LIMIT   Maximum (limit) encoder reading when moving horizontal motor right\n"
-    "  -r LIMIT   Minumum (limit) encoder reading when moving horizontal motor left\n"
+    "  -r LIMIT   Minimum (limit) encoder reading when moving horizontal motor left\n"
     "             Limits are in range [0, 4095]\n"
     "  -q PERIOD  Encoders update period\n"
     ;
-}
-
-std::optional<const char*> get_next_arg(int& i, const int argc, const char* const argv[]) {
-  ++i;
-  if (i >= argc) {
-    return std::nullopt;
-  }
-  return argv[i];
 }
 
 int main(const int argc, const char* const argv[]) {
@@ -67,11 +59,12 @@ int main(const int argc, const char* const argv[]) {
           std::cerr << "Option -f requires a file name\n";
           return 1;
         }
-        if (!std::filesystem::exists(argv[i])) {
-          std::cerr << "File " << argv[i] << " does not exist\n";
+        if (!std::filesystem::exists(*arg)) {
+          std::cerr << "File " << *arg << " does not exist\n";
           return 1;
         }
-        input_file = argv[i];
+        input_file = *arg;
+        break;
       }
       case 't': {
         auto arg = get_next_arg();
