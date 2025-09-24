@@ -188,6 +188,8 @@ motor1->add_data_callback(encoder_callback);
 
 W skrócie, callback to funkcja, która jest wywoływana w momencie określonego zdarzenia, z konkretnymi parametrami tego zdarzenia. W tym wypadku enkoder co odczyt wywoła podany callback z wartością odczytu. Powyższe dwie implementacje zachowają się identycznie.
 
+> **Uwaga** Jeżeli callback silnika będzie wykonywał się dłużej niż okres aktualizacji enkodera, to program zakończy się błędem. Callbacki powinny być małymi, "tanimi" funkcjami.
+
 Charakterystyka silników:
 - Typ sygnału sterującego: `int8_t` (zakres: -128 do 127)
 - Typ odczytu enkodera: `uint16_t` (zakres: 0 do 4095)
