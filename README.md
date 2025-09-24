@@ -44,7 +44,7 @@ Pamiętaj, że zadanie służy sprawdzeniu wielu umiejętności - nie tylko prog
 ---
 
 - W uruchomionym programie zadaj cel za pomocą wiersza poleceń, np: `5 3 4 5`. Wyjaśnienie tego, co oznaczają poszczególne liczby znajdziesz w sekcji [wprowadzanie celów](#wprowadzanie-celów).
-- Za pomocą `Ctrl+D` zakończ wprowadzanie celów. Gdy zaimplementujesz swoje rozwiązanie, to po wciśnięciu `Ctrl+D` zadane punkty zostaną mu przekazane. Na tym etapie, gdy rozwiązanie jest puste, program po prostu zakończy działanie.
+- Za pomocą `Ctrl+D` zakończ wprowadzanie celów. Gdy zaimplementujesz swoje rozwiązanie, to po wciśnięciu `Ctrl+D` zadane punkty zostaną mu przekazane. Na tym etapie zostanie wykonany przykład zawarty w funkcji `solver()` w `/src/solution/solution.cpp`.
 
 2. **Dojazd do pojedyńczego celu**
 
@@ -63,7 +63,7 @@ Przykład testowy:
 3. **Dojazd do wielu celów (priorytet ostatniego)**
 
 - Zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Każdy punkt należy obsłużyć dokładnie tak jak w poprzednim zadaniu. Jeżeli podczas dojazdu do celu zostanie zadany kolejny cel, należy obecny cel porzucić.
-- W tym zadaniu należy uruchamiać program z flagą `-w`.
+- W tym zadaniu należy uruchamiać program z flagą `-p`.
 
 Przykład testowy:
 
@@ -79,7 +79,7 @@ Przykład testowy:
 4. **Dojazd do wielu celów (kolejka)**
 
 - Zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Należy każdy z tych punktów obsłużyć dokładnie tak jak w poprzednim zadaniu, dojeżdżając do każdego po kolei, bez wywłaszczenia.
-- W tym zadaniu należy uruchamiać program z flagą `-w`.
+- W tym zadaniu **nie należy** używać flagi `-p`.
 
 Przykład testowy:
 
@@ -167,6 +167,10 @@ Składniki:
 - `get_motor_1()` - zwraca komponent odpowiadający za komunikację z silnikiem osi poziomej
 - `get_motor_2()` - zwraca komponent odpowiadający za komunikację z silnikiem osi pionowej
 - `get_commands()` - zwraca komponent do odbierania celów
+
+#### Funkcja `solver(tester, preempt)`
+
+Parametr `tester` daje Ci dostęp, zgodnie z powyższym opisem, do komponentów potrzebnych do rozwiązania zadania. Flaga boolowska `preempt` określa, czy włączony jest tryb wywłaszczania celu, czy nie (odpowiednio do zadania 3 i 4).
 
 #### Interfejs `Component`
 
@@ -256,6 +260,7 @@ Program symulacji platformy obrotowej obsługuje następujące argumenty wiersza
 | `-h` | - | Wyświetla wiadomość pomocy z listą wszystkich dostępnych opcji |
 | `-f` | FILE | Odczytuje dane wejściowe z podanego pliku zamiast ze standardowego wejścia |
 | `-g` | - | Włącza tryb debugowania (verbose output) |
+| `-p` | - | Włącza tryb wywłaszczania (potrzebny do zadania 3)
 | `-q` | PERIOD | Ustawia okres aktualizacji enkoderów (w sekundach) |
 
 #### Przykłady użycia
