@@ -98,9 +98,9 @@ Przykład testowy:
 
 #### Wstęp
 
-W tej symulacji operujemy dwoma układami współrzędnych: globalnym (nieruchomy, który opisuje całą przestrzeń, w której porusza się kamera) oraz lokalnym kamery (który obraca się wraz z nią). Wyobraź sobie, że kamera siedzi w punkcie (0,0,0) i może obracać się w poziomie i w pionie - w praktyce nie musimy martwić się fizycznymi wymiarami statywu czy samej kamery, czyli tak naprawdę „kamera to punkt, a silniki zmieniają jej kierunek patrzenia”.
+W tej symulacji operujemy dwoma układami współrzędnych: globalnym (nieruchomy, który opisuje całą przestrzeń, w której porusza się kamera) oraz lokalnym kamery (który obraca się wraz z nią). Wyobraź sobie, że kamera siedzi w punkcie (0,0,0) i może obracać się w poziomie i w pionie - w praktyce nie musimy martwić się fizycznymi wymiarami statywu czy samej kamery, czyli tak naprawdę „kamera wisi w miejscu, a silniki zmieniają jej kierunek patrzenia”.
 
-Silnik 1 odpowiada za obrót w poziomie (jakbyś obracał głowę w lewo i w prawo), a silnik 2 za ruch w pionie (góra-dół). Aby wiedzieć, w jakim kierunku patrzy kamera, korzystamy z enkoderów - to cyfrowe liczniki, które mówią nam, o ile stopni obrócił się dany silnik. Symulacja nie zajmuje się mechanicznymi detalami montażu - liczy się tylko matematyka obrotów i przesyłanie odpowiednich sygnałów do silników, tak aby kamera mogła „wycelować” w wskazany punkt w przestrzeni.
+Silnik 1 odpowiada za obrót w poziomie (jakbyś obracał głowę w lewo i w prawo), a silnik 2 za ruch w pionie (góra-dół). Aby wiedzieć, w jakim kierunku patrzy kamera, korzystamy z enkoderów - to cyfrowe liczniki, które mówią nam, o ile stopni obrócił się dany silnik (zakodowane jako wartość z zakresu [0; 4095]). Symulacja nie zajmuje się mechanicznymi detalami montażu - liczy się tylko matematyka obrotów i przesyłanie odpowiednich sygnałów do silników, tak aby kamera mogła „wycelować” w wskazany punkt w przestrzeni.
 
 #### System współrzędnych i mapowanie enkoderów
 
@@ -110,15 +110,12 @@ Symulacja implementuje dwu-osiową platformę obrotową z następującym układe
   <img src="assets/ss_start.jpg" alt="Układ współrzędnych symulacji" width="400">
 </div>
 
-Na powyższym diagramie kamera znajduje się w pozycji początkowej. Pogrubione osie są osiami układu kamery, zaś cieńkie są osiami układu globalnego. W tej pozycji odczyty z enkoderów będą, dla obu silników, równe 0.
-
-Kamera:
-- Znajduje się i obraca w punkcie `(0,0,0)`, czyli nie symulujemy żadnych wymiarów montażu, samej kamery, etc.
+Na powyższym diagramie kamera znajduje się w pozycji początkowej `(0,0,0)`. Pogrubione osie są osiami układu kamery, zaś cieńkie są osiami układu globalnego. W tej pozycji odczyty z enkoderów będą, dla obu silników, równe 0.
 
 Silnik 1 - Oś pozioma:
 - Wartość = 0 → kamera skierowana w kierunku +X
 - Wartość rosnąca → silnik kręci się zgodnie z ruchem wskazówek zegara
-- Steruje obrotem w okół osi Z globalnego układu współrzędnych
+- Steruje obrotem w okół osi Z globalnego układu współrzędnych (cienka niebieska oś)
 
 <div style="display: flex; justify-content: center; gap: 10px;">
   <img src="assets/Silnik1.gif" alt="Obrót silnikiem 1" width="400">
@@ -127,9 +124,9 @@ Silnik 1 - Oś pozioma:
 Powyższy gif jest wizualizacją sterowania silnikiem 1. Jak widać, obrót odbywa się w okół globalnej (cienkiej) osi pionowej.
 
 Silnik 2 - Oś pionowa:
-- Wartość = 0 → kamera skierowana "poziomo" (równolegle do płaszczyzny XY)
+- Wartość = 0 → kamera skierowana poziomo, równolegle do ziemi (płaszczyzny XY).
 - Wartość rosnąca → silnik kręci się do góry
-- Steruje obrotem w okół osi Y układy współrzędnych kamery
+- Steruje obrotem w okół osi Y układy współrzędnych kamery (pogrubiona zielona oś)
 
 <div style="display: flex; justify-content: center; gap: 10px;">
   <img src="assets/Silnik2.gif" alt="Obrót silnikiem 2" width="400">
@@ -178,13 +175,15 @@ Wszystkie komponenty implementują interfejs `Component<Send, Receive>`, który 
 ```cpp
 template <typename Send, typename Receive>
 class Component {
-public:
+  public:
   virtual void add_data_callback(std::function<void(const Receive&)>) = 0;
   virtual void send_data(const Send&) = 0;
 };
 ```
 
 W skrócie, za pomocą `send_data()` wysyłamy dane do komponentu, a za pomocą `add_data_callback()` możemy ustawić callback dla komponentu (wyjaśnione później)
+
+> **Uwaga!** Nie oczekujemy, na tym etapie, że rozumiesz co dokładnie oznacza każde słowo w powyższym kodzie. Poniżej znajdziesz przykłady, na podstawie których powinieneś z łatwością mógł przystąpić do implementacji rozwiązania.
 
 #### Silniki (`Component<int8_t, uint16_t>`)
 
@@ -213,7 +212,7 @@ motor1->add_data_callback(encoder_callback);
 
 W skrócie, callback to funkcja, która jest wywoływana w momencie określonego zdarzenia, z konkretnymi parametrami tego zdarzenia. W tym wypadku enkoder co odczyt wywoła podany callback z wartością odczytu. Powyższe dwie implementacje zachowają się identycznie.
 
-> **Uwaga** Jeżeli callback silnika będzie wykonywał się dłużej niż okres aktualizacji enkodera, to program zakończy się błędem. Callbacki powinny być małymi, "tanimi" funkcjami.
+> **Wskazówka!** Jeżeli callback silnika będzie wykonywał się dłużej niż okres aktualizacji enkodera, to program zakończy się błędem. Callbacki powinny być małymi, "tanimi" funkcjami.
 
 Charakterystyka silników:
 - Typ sygnału sterującego: `int8_t` (zakres: -128 do 127)
