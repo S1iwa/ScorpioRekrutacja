@@ -187,7 +187,7 @@ class Component {
 
 W skrócie, za pomocą `send_data()` wysyłamy dane do komponentu, a za pomocą `add_data_callback()` możemy ustawić callback dla komponentu (wyjaśnione później)
 
-> **Uwaga!** Nie oczekujemy, na tym etapie, że rozumiesz co dokładnie oznacza każde słowo w powyższym kodzie. Poniżej znajdziesz przykłady, na podstawie których powinieneś z łatwością mógł przystąpić do implementacji rozwiązania.
+> **Uwaga!** Nie oczekujemy, na tym etapie, że rozumiesz co dokładnie oznacza każde słowo w powyższym kodzie. Poniżej, oraz w funkcji `solver()`, znajdziesz przykłady, na podstawie których powinieneś z łatwością mógł przystąpić do implementacji rozwiązania.
 
 #### Silniki (`Component<int8_t, uint16_t>`)
 
