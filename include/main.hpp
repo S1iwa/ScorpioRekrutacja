@@ -33,10 +33,6 @@ std::optional<std::vector<std::pair<double, Point>>> parse(T&& input_stream) {
       std::cerr << "Invalid input format\n";
       return std::nullopt;
     }
-    if (!signals.empty() && delay < signals.back().first) {
-      std::cerr << "Delays must be non-decreasing\n";
-      return std::nullopt;
-    }
     if (delay < 0.0) {
       std::cerr << "Delay must be non-negative\n";
       return std::nullopt;

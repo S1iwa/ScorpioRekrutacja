@@ -1,6 +1,6 @@
 # Projekt Scorpio - zadanie rekrutacyjne do działu Software
 
->**Uwaga!** Przed przystąpieniem do realizacji zadania przeczytaj **całe** README.
+> **Uwaga!** Przed przystąpieniem do realizacji zadania przeczytaj **całe** README.
 
 ## Spis treści
 - [Informacje ogólne](#informacje-ogólne)
@@ -12,101 +12,141 @@
 - [Wskazówki i przydatne linki](#wskazówki-i-przydatne-linki)
 
 ## Informacje ogólne
-Zadanie wykorzystuje symulację dwu-osiowej platformy obrotowej, w której za pomocą stworzonego przez nas API można sterować dwoma silnikami oraz dokonywać odczytu wartości ich enkoderów. Silnik numer 1 jest odpowiedzialny za ruch w osi poziomej, zaś numer 2 w pionowej.
+Zadanie wykorzystuje symulację dwu-osiowej platformy obrotowej, w której za pomocą stworzonego przez nas API można sterować dwoma silnikami oraz dokonywać odczytu wartości ich enkoderów liniowych (wytłumaczenie, czym jest enkoder znajdziesz w tym [artykule](https://stoltronic.pl/pl/blog/post/43/enkoder-zasada-dzialania-rodzaje-budowa?page_type=post)). Silnik numer 1 jest odpowiedzialny za ruch w osi poziomej, zaś numer 2 w pionowej.
 
 Uznajemy, na potrzebę zadań, że na osi pionowej zamontowana jest kamera, którą możemy się rozglądać sterując silnikami.
 
 Całość zadania należy wykonać w języku C++, zgodnie ze standardem C++17.
 
+Rozwiązane zadanie należy umieścić w **publicznym** repozytorium (np. GitHub) i przesłać linka do tego repozytorium na mail projekt@scorpio.pwr.edu.pl. Ewentualne pytania lub wątpliwości co do treści zadania można kierować na tego samego maila. Zadania przyjmujemy do 06.04.2025 do końca dnia.
+//  TODO(@mariusz): Change this date
+
 ## Zadania do wykonania 
-W tej części znajdziesz treść poszczególnych zadań, szczegółowe informacje dotyczące symulacji oraz jej implementacji znajdziesz w [specyfikacja techniczna zadania](#specyfikacja-techniczna-zadania).
+W tej części znajdziesz treść poszczególnych zadań. Szczegółowe informacje dotyczące symulacji oraz jej implementacji znajdziesz w sekcji [specyfikacja techniczna zadania](#specyfikacja-techniczna-zadania).
 
 Pamiętaj, że zadanie służy sprawdzeniu wielu umiejętności - nie tylko programowania i znajomości algorytmów -  więc nawet w przypadku zrealizowania tylko części z poniższych punktów, zachęcamy do przesłania rozwiązania. Postępy w zadaniu powinny być udokumentowane w repozytorium na githubie (po każdym etapie zadania powinien zostać stworzony nowy commit).
 
 1. **Zbudowanie projektu:**
 
-- Sklonuj to repozytorium, skonfiguruj środowisko i upewnij się, że projekt kompiluje się przy użyciu `CMake`.
-- Uruchom skompilowany plik wykonywalny i zadaj cel za pomocą wiersza poleceń, np: `5 3 4 5`.
-- Za pomocą `Shift+D` zakończ wprowadzanie celów. Program powinien zakończyć działanie, po implementacji rozwiązania w tym momencie zostaną mu zadane wprowadzone cele.
+- Dokonaj fork'a tego repozytorium i go sklonuj komendą `git clone <URL zforkowanego repo>`.
+- Skonfiguruj środowisko i upewnij się, że projekt kompiluje się przy użyciu `CMake`:
 
-> **Wskazówka!** Dobrym rozwiązaniem jest "fork" tego repozytorium
+---
+
+| Krok | Linux (bash) | Windows (PowerShell / cmd) |
+|------|--------------|----------------------------------------------|
+| 1. Wejście do repo | `cd scorpio_zadanie_rekrutacyjne_software` | `cd scorpio_zadanie_rekrutacyjne_software` |
+| 2. Utwórz katalog build | `mkdir build && cd build` | `mkdir build && cd build` |
+| 3. Generuj pliki przez CMake | `cmake ..` | `cmake ..` |
+| 4. Budowanie | `cmake --build .` | `cmake --build . --config Release` |
+| 5. Uruchom program | `./scorpio_recruitment_task` | `.\Release\scorpio_recruitment_task.exe` |
+
+---
+
+- W uruchomionym programie zadaj cel za pomocą wiersza poleceń, np: `5 3 4 5`. Wyjaśnienie tego, co oznaczają poszczególne liczby znajdziesz w sekcji [wprowadzanie celów](#wprowadzanie-celów).
+- Za pomocą `Shift+D` zakończ wprowadzanie celów. Gdy zaimplementujesz swoje rozwiązanie, to po wciśnięciu `Shift+D` zadane punkty zostaną mu przekazane. Na tym etapie, gdy rozwiązanie jest puste, program po prostu zakończy działanie.
 
 2. **Dojazd do pojedyńczego celu**
 
-- Poprzez komponent odpowiedzialny za zadawanie punktów zostanie przesłany pojedyńczy punkt. Należy obrócić obydwoma silnikami tak, aby kamera patrzyła na ten punkt.
+- Zostanie Ci przesłany pojedyńczy punkt. Należy obrócić obydwoma silnikami tak, aby kamera patrzyła na ten punkt.
+
+Przykład testowy:
+
+```bash
+0 1 1 0
+```
+
+> **Wskazówka!** Żeby nie wprowadzać danych za każdym razem, możesz przekleić przykład testowy do pliku i wykorzystać flagę `-f` udokumentowaną w sekcji [dokumentacja argumentów CLI](#dokumentacja-argumentów-cli) 
 
 > **Wskazówka!** W sekcji [symulacja](#symulacja) znajdziesz dokładny opis platformy obrotowej.
 
 3. **Dojazd do wielu celów (priorytet ostatniego)**
 
-- Poprzez komponent odpowiedzialny za zadawanie punktów zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Każdy punkt należy obsłużyć dokładnie tak jak w poprzednim zadaniu. Jeżeli podczas dojazdu do celu zostanie zadany kolejny cel, należy obecny cel porzucić.
+- Zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Każdy punkt należy obsłużyć dokładnie tak jak w poprzednim zadaniu. Jeżeli podczas dojazdu do celu zostanie zadany kolejny cel, należy obecny cel porzucić.
+- W tym zadaniu należy uruchamiać program z flagą `-w`.
+
+Przykład testowy:
+
+```bash
+0 1 1 0
+10 1 1 1
+1 -1 0 0
+3 1 1 0
+```
 
 > **Wskazówka!** Pamiętaj o regularnym commitowaniu rozwiązania.
 
-4.1. **Dojazd do wielu celów (kolejka)**
+4. **Dojazd do wielu celów (kolejka)**
 
-- Poprzez komponent odpowiedzialny za zadawanie punktów zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Należy każdy z tych punktów obsłużyć dokładnie tak jak w poprzednim zadaniu, dojeżdżając do każdego po kolei, bez wywłaszczenia.
+- Zostanie przesłana arbitralna liczba punktów w odstępach niewiększych niż 10 sekund. Należy każdy z tych punktów obsłużyć dokładnie tak jak w poprzednim zadaniu, dojeżdżając do każdego po kolei, bez wywłaszczenia.
+- W tym zadaniu należy uruchamiać program z flagą `-w`.
 
-4.2. **Dojazd do wielu celów (z ograniczeniami)**
+Przykład testowy:
 
-- W tym zadaniu zostaną zadane limity dla każdego z silników. Cele należy obsłużyć analogicznie do zadania 4.1 (kolejkowo) i dojazd do nich może być niemożliwy w ramach zadanych limitów.
+```bash
+0 1 1 0
+10 1 1 1
+1 -1 0 0
+3 1 1 0
+```
+
+> **Wskazówka!** Oczekujemy, że sam określisz margines dojechania do celu.
 
 ## Specyfikacja techniczna zadania
 
 ### Symulacja
 
+#### Wstęp
+
+W tej symulacji operujemy dwoma układami współrzędnych: globalnym (nieruchomy, który opisuje całą przestrzeń, w której porusza się kamera) oraz lokalnym kamery (który obraca się wraz z nią). Wyobraź sobie, że kamera siedzi w punkcie (0,0,0) i może obracać się w poziomie i w pionie - w praktyce nie musimy martwić się fizycznymi wymiarami statywu czy samej kamery, czyli tak naprawdę „kamera to punkt, a silniki zmieniają jej kierunek patrzenia”.
+
+Silnik 1 odpowiada za obrót w poziomie (jakbyś obracał głowę w lewo i w prawo), a silnik 2 za ruch w pionie (góra-dół). Aby wiedzieć, w jakim kierunku patrzy kamera, korzystamy z enkoderów - to cyfrowe liczniki, które mówią nam, o ile stopni obrócił się dany silnik. Symulacja nie zajmuje się mechanicznymi detalami montażu - liczy się tylko matematyka obrotów i przesyłanie odpowiednich sygnałów do silników, tak aby kamera mogła „wycelować” w wskazany punkt w przestrzeni.
+
 #### System współrzędnych i mapowanie enkoderów
+
+// TODO: w tej sekcji powinny znaleźć się gify objaśniające
 
 Symulacja implementuje dwu-osiową platformę obrotową z następującym układem współrzędnych:
 
-**Kamera**
+Kamera:
 - Znajduje się i obraca w punkcie `(0,0,0)`, czyli nie symulujemy żadnych wymiarów montażu, samej kamery, etc.
 
-**Silnik 1 - Oś pozioma:**
+Silnik 1 - Oś pozioma:
 - Wartość = 0 → kamera skierowana w kierunku +X
 - Wartość rosnąca → silnik kręci się zgodnie z ruchem wskazówek zegara
 
-**Silnik 2 - Oś pionowa:**
+Silnik 2 - Oś pionowa:
 - Wartość = 0 → kamera skierowana "poziomo" (równolegle do płaszczyzny XY)
 - Wartość rosnąca → silnik kręci się do góry
 
 #### Charakterystyka ruchu
 
-**Sygnały sterujące:**
+Sygnały sterujące:
 - Wartości dodatnie (1-127): ruch w kierunku rosnących wartości enkodera
 - Wartości ujemne (-128 do -1): ruch w kierunku malejących wartości enkodera
 - Wartość 0: brak ruchu
 
-**Właściwości enkoderów:**
+Właściwości enkoderów:
 - Zakres: 0-4095 (12-bit, cykliczny)
+- Cykliczność: enkodery są cykliczne, po pełnym obrocie do 4095 kolejną wartością będzie 0
 - Rozdzielczość: 4096 pozycji na pełny obrót (360°)
-- Szum: dodawany szum gaussowski (σ = 0.6)
+- Drgania: silnik (co za tym idzie, odczyt enkodera) drga stojąc w miejscu
 - Częstotliwość odczytu: konfigurowalna (domyślnie 20 Hz)
-
-**Ograniczenia mechaniczne:**
-- Silniki respektują limity ustawione przez parametry CLI (`-t`, `-d`, `-l`, `-r`)
-- Po osiągnięciu limitu silnik zatrzymuje się na pozycji granicznej
-- Enkodery są cykliczne: po wartości 4095 następuje 0
-
-**Uwagi implementacyjne:**
-- Prędkość ruchu jest proporcjonalna do kwadratu sygnału sterującego
-- Silniki mają bezwładność - nie zatrzymują się natychmiast
-- Callback enkodera jest wywoływany co okres aktualizacji z dodanym szumem
 
 ### Dokumentacja API
 
-> **Uwaga!** Nie należy modyfikować implementacji symulacji. Całe twoje rozwiązanie powinno znaleźć się w katalogach `*/solution`, a punktem wejściowym twojego rozwiązania powinna być metoda `solver()` w pliku `solution.cpp`.
+> **Uwaga!** Nie należy modyfikować implementacji symulacji. Całe twoje rozwiązanie powinno znaleźć się w katalogach `*/solution`, a punktem wejściowym twojego rozwiązania powinna być funkcja `solver()` w pliku `solution.cpp`.
 
-#### Interfejs Tester
+#### Interfejs `Tester`
 
-Interfejs `backend_interface::Tester` zapewnia dostęp do symulacji dwu-osiowej platformy obrotowej. Pozwala na sterowanie silnikami oraz odbieranie sygnałów poleceń.
+Interfejs `backend_interface::Tester` zapewnia dostęp do symulacji dwu-osiowej platformy obrotowej. Pozwala na sterowanie silnikami oraz odbieranie celów.
 
-**Składniki:**
-- `get_motor_1()` - zwraca silnik osi poziomej
-- `get_motor_2()` - zwraca silnik osi pionowej
-- `get_commands()` - zwraca komponent do odbierania poleceń pozycji
+Składniki:
+- `get_motor_1()` - zwraca komponent odpowiadający za komunikację z silnikiem osi poziomej
+- `get_motor_2()` - zwraca komponent odpowiadający za komunikację z silnikiem osi pionowej
+- `get_commands()` - zwraca komponent do odbierania celów
 
-#### Interfejs Component
+#### Interfejs `Component`
 
 Wszystkie komponenty implementują interfejs `Component<Send, Receive>`, który udostępnia możliwość pracy w modelu publisher/subscriber:
 
@@ -119,31 +159,44 @@ public:
 };
 ```
 
+W skrócie, za pomocą `send_data()` wysyłamy dane do komponentu, a za pomocą `add_data_callback()` możemy ustawić callback dla komponentu (wyjaśnione później)
+
 #### Silniki (`Component<int8_t, uint16_t>`)
 
-**Wysyłanie sygnału sterującego:**
+Wysyłanie sygnału sterującego:
 ```cpp
 auto motor1 = tester->get_motor_1();
-motor1->send_data(100);  // Wartość z zakresu int8_t
+motor1->send_data(100);  // Wartość z zakresu [-128; 127]
 ```
 
-**Odbieranie pozycji enkodera:**
+Odbieranie pozycji enkodera:
 ```cpp
 motor1->add_data_callback([](const uint16_t& encoder_value) {
     std::cout << "Pozycja enkodera: " << encoder_value << std::endl;
 });
 ```
 
-**Charakterystyka silników:**
+*lub analogicznie:*
+
+```cpp
+void encoder_callback(const uint16_t& encoder_value) {
+  std::cout << "Pozycja enkodera: " << encoder_value << std::endl;
+}
+
+motor1->add_data_callback(encoder_callback);
+```
+
+W skrócie, callback to funkcja, która jest wywoływana w momencie określonego zdarzenia, z konkretnymi parametrami tego zdarzenia. W tym wypadku enkoder co odczyt wywoła podany callback z wartością odczytu. Powyższe dwie implementacje zachowają się identycznie.
+
+Charakterystyka silników:
 - Typ sygnału sterującego: `int8_t` (zakres: -128 do 127)
 - Typ odczytu enkodera: `uint16_t` (zakres: 0 do 4095)
-- Motor 1: steruje osią poziomą
-- Motor 2: steruje osią pionową
-- Ograniczenia: silniki respektują limity ustawione podczas inicjalizacji
+- Motor 1: steruje obrotem w okół osi Z globalnego układu współrzędnych
+- Motor 2: steruje obrotem w okół osi Y układy współrzędnych kamery
 
 #### Polecenia (`Component<Impossible, Point>`)
 
-**Odbieranie poleceń pozycji:**
+Odbieranie poleceń pozycji:
 ```cpp
 auto commands = tester->get_commands();
 commands->add_data_callback([](const Point& target) {
@@ -153,8 +206,7 @@ commands->add_data_callback([](const Point& target) {
 });
 ```
 
-**Struktura Point:**
-
+Struktura Point: <br>
 Reprezentuje punkt w przestrzeni trójwymiarowej.
 
 ```cpp
@@ -162,19 +214,6 @@ struct Point {
   double x;  // Współrzędna X
   double y;  // Współrzędna Y  
   double z;  // Współrzędna Z
-};
-```
-
-**Struktura Constraints:**
-
-Struktura określna maksymalne/minimalne wartości odczytu z enkoderów silników.
-
-```cpp
-struct Constraints {
-  std::optional<uint16_t> vertical_max;   // Ograniczenie górne osi pionowej.
-  std::optional<uint16_t> vertical_min;   // Ograniczenie dolne osi pionowej
-  std::optional<uint16_t> horizontal_max; // Ograniczenie górne osi poziomej
-  std::optional<uint16_t> horizontal_min; // Ograniczenie dolne osi poziomej
 };
 ```
 
@@ -186,11 +225,6 @@ struct Constraints {
 
 Program symulacji platformy obrotowej obsługuje następujące argumenty wiersza poleceń:
 
-#### Składnia
-```
-./scorpio_recruitment_task [opcje]
-```
-
 #### Dostępne opcje
 
 | Opcja | Argument | Opis |
@@ -198,10 +232,6 @@ Program symulacji platformy obrotowej obsługuje następujące argumenty wiersza
 | `-h` | - | Wyświetla wiadomość pomocy z listą wszystkich dostępnych opcji |
 | `-f` | FILE | Odczytuje dane wejściowe z podanego pliku zamiast ze standardowego wejścia |
 | `-g` | - | Włącza tryb debugowania (verbose output) |
-| `-t` | LIMIT | Ustawia maksymalny (górny) limit odczytu enkodera przy ruchu silnika pionowego w górę |
-| `-d` | LIMIT | Ustawia minimalny (dolny) limit odczytu enkodera przy ruchu silnika pionowego w dół |
-| `-r` | LIMIT | Ustawia maksymalny (prawy) limit odczytu enkodera przy ruchu silnika poziomego w prawo |
-| `-l` | LIMIT | Ustawia minimalny (lewy) limit odczytu enkodera przy ruchu silnika poziomego w lewo |
 | `-q` | PERIOD | Ustawia okres aktualizacji enkoderów (w sekundach) |
 
 #### Przykłady użycia
@@ -213,25 +243,30 @@ Program symulacji platformy obrotowej obsługuje następujące argumenty wiersza
 # Uruchomienie z plikiem wejściowym
 ./scorpio_recruitment_task -f commands.txt
 
-# Uruchomienie z niestandardowymi limitami i trybem debug
-./scorpio_recruitment_task -g -t 3000 -d 1000 -l 3500 -r 500
-
 # Uruchomienie z szybszym odświeżaniem enkoderów
 ./scorpio_recruitment_task -q 0.01
-
-# Kombinacja opcji
-./scorpio_recruitment_task -f input.txt -g -q 0.02 -t 4000 -d 0 -l 4095 -r 0
 ```
 
-#### Uwagi
-- Argumenty można podawać w dowolnej kolejności
-- W przypadku błędnych argumentów program wyświetli komunikat o błędzie i zakończy działanie
-- Użyj opcji `-h` aby wyświetlić szybką pomoc
+#### Wprowadzanie celów
+
+Format pojedyńczego celu jest następujący:
+`<delay> <X> <Y> <Z>`
+
+- `delay` -> określa w jakim odstępie czasowym od poprzedniego celu zostanie zadany ten cel
+- `X`, `Y`, `Z` -> współrzędne celu w przestrzeni 3D
+
+Przykład:
+
+```shell
+5 1 2 3 # (1,2,3) zadany po 5 sekundach działania symulacji
+5 5 5 5 # (5,5,5) zadany po kolejnych 5 sekundach
+10 9 8 7 # (9,8,7) zadany po kolejnych 10 sekundach
+1 2 3 4 # (2,3,4) zadany po kolejnej sekundzie
+```
 
 ## Wskazówki i przydatne linki
 
-- [C++17 Reference - cppreference.com](https://en.cppreference.com/)
-- [CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
+- [Czym jest enkoder](https://stoltronic.pl/pl/blog/post/43/enkoder-zasada-dzialania-rodzaje-budowa?page_type=post)
 - Zadanie rekrutacyjne można oddać niepełne.
 - Rozwiązane zadanie należy umieścić w **publicznym** repozytorium (np. GitHub) i przesłać linka do tego repozytorium na mail projekt@scorpio.pwr.edu.pl. Ewentualne pytania lub wątpliwości co do treści zadania można kierować na tego samego maila. Zadania przyjmujemy do 06.04.2025 do końca dnia.
 //  TODO(@mariusz): Change this date
