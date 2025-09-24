@@ -43,7 +43,7 @@ std::optional<std::vector<std::pair<double, Point>>> parse(T&& input_stream) {
 }
 
 template<typename T>
-void run_tests(T&& input_stream, double encoder_period, bool debug, Constraints constraints) {
+void run_tests(T&& input_stream, double encoder_period, bool debug, const Constraints& constraints, bool preempt) {
   static_assert(std::is_base_of_v<std::istream, std::decay_t<T>>,
     "Input type must be derived from std::istream");
   auto signals = parse(std::forward<T>(input_stream));
@@ -51,5 +51,5 @@ void run_tests(T&& input_stream, double encoder_period, bool debug, Constraints 
     return;
   }
   auto tester = std::make_shared<backend::BasicTester>(encoder_period, signals.value(), debug, constraints);
-  solver(tester, constraints);
+  solver(tester, preempt);
 }

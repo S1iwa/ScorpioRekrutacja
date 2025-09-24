@@ -13,11 +13,7 @@ void print_help(const char* const self) {
     "  -h         Show this help message\n"
     "  -f FILE    Read input from FILE instead of standard input\n"
     "  -g         Enable debug output\n"
-    "  -t LIMIT   Maximum (limit) encoder reading when moving vertical motor up\n"
-    "  -d LIMIT   Minimum (limit) encoder reading when moving vertical motor down\n"
-    "  -l LIMIT   Maximum (limit) encoder reading when moving horizontal motor right\n"
-    "  -r LIMIT   Minimum (limit) encoder reading when moving horizontal motor left\n"
-    "             Limits are in range [0, 4095]\n"
+    "  -p         Preempt targets if they are not reached when new command arrives\n"
     "  -q PERIOD  Encoders update period\n"
     ;
 }
@@ -29,6 +25,7 @@ int main(const int argc, const char* const argv[]) {
   }
   std::optional<const char*> input_file;
   Constraints constraints;
+  bool preempt = false;
   double encoder_period = 0.05;
   int i = 1;
   bool debug = false;
@@ -141,6 +138,10 @@ int main(const int argc, const char* const argv[]) {
           return 1;
         }
     }
+    case 'p': {
+      preempt = true;
+      break;
+    }
     case 'q': {
         auto arg = get_next_arg();
         if (!arg.has_value()) {
@@ -171,10 +172,10 @@ int main(const int argc, const char* const argv[]) {
       std::cerr << "Failed to open file " << *input_file << "\n";
       return 1;
     }
-    run_tests(file_stream, encoder_period, debug, constraints);
+    run_tests(file_stream, encoder_period, debug, constraints, preempt);
   } else {
     std::cout << "Reading from standard input, press Ctrl+D (or Ctrl+Z on Windows) to end input\n";
-    run_tests(std::cin, encoder_period, debug, constraints); 
+    run_tests(std::cin, encoder_period, debug, constraints, preempt);
   }
   return 0;
 }
