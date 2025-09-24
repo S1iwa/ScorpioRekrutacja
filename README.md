@@ -104,9 +104,13 @@ Silnik 1 odpowiada za obrót w poziomie (jakbyś obracał głowę w lewo i w pra
 
 #### System współrzędnych i mapowanie enkoderów
 
-// TODO: w tej sekcji powinny znaleźć się gify objaśniające
-
 Symulacja implementuje dwu-osiową platformę obrotową z następującym układem współrzędnych:
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="assets/ss_start.jpg" alt="Układ współrzędnych symulacji" width="400">
+</div>
+
+Na powyższym diagramie kamera znajduje się w pozycji początkowej. Pogrubione osie są osiami układu kamery, zaś cieńkie są osiami układu globalnego. W tej pozycji odczyty z enkoderów będą, dla obu silników, równe 0.
 
 Kamera:
 - Znajduje się i obraca w punkcie `(0,0,0)`, czyli nie symulujemy żadnych wymiarów montażu, samej kamery, etc.
@@ -114,10 +118,31 @@ Kamera:
 Silnik 1 - Oś pozioma:
 - Wartość = 0 → kamera skierowana w kierunku +X
 - Wartość rosnąca → silnik kręci się zgodnie z ruchem wskazówek zegara
+- Steruje obrotem w okół osi Z globalnego układu współrzędnych
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="assets/Silnik1.gif" alt="Obrót silnikiem 1" width="400">
+</div>
+
+Powyższy gif jest wizualizacją sterowania silnikiem 1. Jak widać, obrót odbywa się w okół globalnej (cienkiej) osi pionowej.
 
 Silnik 2 - Oś pionowa:
 - Wartość = 0 → kamera skierowana "poziomo" (równolegle do płaszczyzny XY)
 - Wartość rosnąca → silnik kręci się do góry
+- Steruje obrotem w okół osi Y układy współrzędnych kamery
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="assets/Silnik2.gif" alt="Obrót silnikiem 2" width="400">
+</div>
+
+Powyższy gif jest wizualizacją sterowania silnikiem 2. Jak widać, obrót odbywa się w okół osi Y układu kamery (pogrubionej).
+
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="assets/Enkoder1.gif" alt="Enkoder 1" width="300">
+  <img src="assets/Enkoder2.gif" alt="Enkoder 2" width="300">
+</div>
+
+Powyższe gify, odpowiednio dla silników 1 i 2, obrazują narastanie wartości enkoderów, zaczynając od 0. Tzn. na początku odczyt będzie równy 0 i wraz z czasem będzie rósł.
 
 #### Charakterystyka ruchu
 
@@ -193,8 +218,6 @@ W skrócie, callback to funkcja, która jest wywoływana w momencie określonego
 Charakterystyka silników:
 - Typ sygnału sterującego: `int8_t` (zakres: -128 do 127)
 - Typ odczytu enkodera: `uint16_t` (zakres: 0 do 4095)
-- Motor 1: steruje obrotem w okół osi Z globalnego układu współrzędnych
-- Motor 2: steruje obrotem w okół osi Y układy współrzędnych kamery
 
 #### Polecenia (`Component<Impossible, Point>`)
 
