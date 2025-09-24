@@ -44,7 +44,7 @@ Pamiętaj, że zadanie służy sprawdzeniu wielu umiejętności - nie tylko prog
 ---
 
 - W uruchomionym programie zadaj cel za pomocą wiersza poleceń, np: `5 3 4 5`. Wyjaśnienie tego, co oznaczają poszczególne liczby znajdziesz w sekcji [wprowadzanie celów](#wprowadzanie-celów).
-- Za pomocą `Shift+D` zakończ wprowadzanie celów. Gdy zaimplementujesz swoje rozwiązanie, to po wciśnięciu `Shift+D` zadane punkty zostaną mu przekazane. Na tym etapie, gdy rozwiązanie jest puste, program po prostu zakończy działanie.
+- Za pomocą `Ctrl+D` zakończ wprowadzanie celów. Gdy zaimplementujesz swoje rozwiązanie, to po wciśnięciu `Ctrl+D` zadane punkty zostaną mu przekazane. Na tym etapie, gdy rozwiązanie jest puste, program po prostu zakończy działanie.
 
 2. **Dojazd do pojedyńczego celu**
 
@@ -230,7 +230,7 @@ commands->add_data_callback([](const Point& target) {
 });
 ```
 
-Struktura Point: <br>
+Struktura `Point`: <br>
 Reprezentuje punkt w przestrzeni trójwymiarowej.
 
 ```cpp
