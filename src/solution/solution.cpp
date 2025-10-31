@@ -33,11 +33,3 @@ int solver(std::shared_ptr<backend_interface::Tester> tester, bool preempt) {
   return 0;
 }
 
-double calcHorizontalAngle(Point point) {
-  return atan2(point.y, point.x) * 180.0 / M_PI;
-}
-
-double calcVerticalAngle(Point point) {
-  double distance = sqrt(point.x * point.x + point.y * point.y);
-  return atan2(point.z, distance) * 180.0 / M_PI;
-}
