@@ -1,9 +1,15 @@
 #include "tester.hpp"
+#include "solution.h"
 
 // You can remove or add any includes you need
 #include <chrono>
 #include <iostream>
 #include <thread>
+
+#include <cmath>
+
+// Zadanie 2 to zadanie 4, tylko po prostu kolejka z 1 elementem
+// dlatego zacznę od 4
 
 int solver(std::shared_ptr<backend_interface::Tester> tester, bool preempt) {
   // Short example you can remove it
@@ -25,4 +31,13 @@ int solver(std::shared_ptr<backend_interface::Tester> tester, bool preempt) {
   std::this_thread::sleep_for(std::chrono::milliseconds(250));
   //
   return 0;
+}
+
+double calcHorizontalAngle(Point point) {
+  return atan2(point.y, point.x) * 180.0 / M_PI;
+}
+
+double calcVerticalAngle(Point point) {
+  double distance = sqrt(point.x * point.x + point.y * point.y);
+  return atan2(point.z, distance) * 180.0 / M_PI;
 }

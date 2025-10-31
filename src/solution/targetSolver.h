@@ -1,0 +1,13 @@
+//
+// Created by S1iwa on 31/10/2025.
+//
+
+#ifndef SCORPIO_RECRUITMENT_TASK_TARGETSOLVER_H
+#define SCORPIO_RECRUITMENT_TASK_TARGETSOLVER_H
+
+
+class targetSolver {
+};
+
+
+#endif //SCORPIO_RECRUITMENT_TASK_TARGETSOLVER_H
