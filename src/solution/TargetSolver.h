@@ -26,7 +26,7 @@ public:
 	void run();
 private:
 	// Callback for new target points
-	void onNewTarget(Point point);
+	void onNewTarget(const Point& point);
 	void onEncoder1Update(const uint16_t& value);
 	void onEncoder2Update(const uint16_t& value);
 

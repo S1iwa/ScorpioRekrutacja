@@ -21,7 +21,6 @@ target_include_directories(backend PRIVATE include/solution_interface/)
 # Solution library
 file(GLOB solution_SRC "src/solution/*.cpp")
 add_library(solution SHARED ${solution_SRC}
-        src/solution/solution.h
         src/solution/targetSolver.cpp
         src/solution/targetSolver.h)
 target_include_directories(solution PRIVATE
